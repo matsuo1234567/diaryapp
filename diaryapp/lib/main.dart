@@ -1,16 +1,19 @@
+import 'package:diaryapp/header.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  // コンストラクタの修正
+  MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(  // constを取り除いた
       home: Scaffold(
+        appBar: Header(),  // constを取り除いた
         body: Center(
           child: Text('Hello World!'),
         ),
@@ -18,3 +21,5 @@ class MainApp extends StatelessWidget {
     );
   }
 }
+
+
