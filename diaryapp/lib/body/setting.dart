@@ -17,7 +17,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final ImagePicker _userPicker = ImagePicker();
   final ImagePicker _aiPicker = ImagePicker();
   File? _aiFile;
   bool isNotificationOn = false;
@@ -70,7 +69,10 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildSectionTitle("User"),
             _buildTextField('名前(ユーザー)'),
             ListTile(
-              title: Text("誕生日"),
+
+              title: Text(
+                  "誕生日 ${selectedDate.toLocal().toString().split(' ')[0]}"),
+
               trailing: Icon(Icons.calendar_today),
               onTap: () => _selectDate(context),
             ),
@@ -79,7 +81,9 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildNotificationButtons(),
             if (isNotificationOn)
               ListTile(
-                title: Text("通知時間"),
+
+                title: Text("通知時間 ${selectedTime.format(context)}"),
+
                 trailing: Icon(Icons.access_time),
                 onTap: () => _selectTime(context),
               ),
