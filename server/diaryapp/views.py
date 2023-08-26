@@ -17,7 +17,7 @@ def get_img(request):
     else:  # ← methodが'POST'ではない = 最初のページ表示時の処理
         return HttpResponse("this is post page!")
 
-    data = Data.objects.create()
+    data = Data.objects.get(id=7)
     data.url = res
     data.save()
 
@@ -33,7 +33,7 @@ def save(data):
 #受け取ったファイルをストレージに保存
 
 def get_url(request):
-    data = Data.objects.get(id=1)
+    data = Data.objects.get(id=7)
     return JsonResponse({"url": data.url})
 
 @csrf_exempt
