@@ -16,7 +16,7 @@ dependencies:
   dart_openai: ^4.0.0
   flutter_dotenv: ^5.1.0
 
-
+  image_picker: ^0.8.4+4
   table_calendar: ^3.0.9
   image_picker: ^1.0.2
 
