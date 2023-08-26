@@ -47,6 +47,46 @@ class _SettingsPageState extends State<SettingsPage> {
                   hintText: '誕生日',
                 ),
               ),
+              SizedBox(height: 16),
+              Text('Notification', style: TextStyle(fontSize: 18)),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isNotificationOn = true;
+                      });
+                    },
+                    child: Text('ON'),
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                          isNotificationOn ? Color(0xffE49B5B) : Colors.grey,
+                      elevation: isNotificationOn ? 2 : 0,
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isNotificationOn = false;
+                      });
+                    },
+                    child: Text('OFF'),
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                          !isNotificationOn ? Color(0xffE49B5B) : Colors.grey,
+                      elevation: !isNotificationOn ? 2 : 0,
+                    ),
+                  ),
+                ],
+              ),
+              if (isNotificationOn)
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: '通知時間',
+                  ),
+                ),
+              SizedBox(height: 16),
             ],
           ),
         ),
