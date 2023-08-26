@@ -21,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffF6F7F9),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Color(0xff5C9387)),
         elevation: 0,
@@ -38,6 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: [
             // User
+
             _buildSectionTitle("User"),
             _buildTextField('名前(ユーザー)'),
 
@@ -80,7 +82,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: TextStyle(fontSize: 18),
+      style: TextStyle(
+        fontSize: 20,
+        color: Color(0xff5C9387),
+      ),
     );
   }
 
@@ -88,6 +93,16 @@ class _SettingsPageState extends State<SettingsPage> {
     return TextFormField(
       decoration: InputDecoration(
         hintText: hint,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xff5C9387),
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xff5C9387),
+          ),
+        ),
       ),
       maxLines: maxLines,
     );
@@ -138,7 +153,10 @@ class _SettingsPageState extends State<SettingsPage> {
       style: ElevatedButton.styleFrom(
         primary: isNotificationOn == value ? Color(0xffE49B5B) : Colors.grey,
         elevation: isNotificationOn == value ? 2 : 0,
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(50),
       ),
+    )
     );
   }
 }
