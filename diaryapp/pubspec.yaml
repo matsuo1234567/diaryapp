@@ -7,9 +7,13 @@ environment:
   sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
+  go_router:
   flutter:
     sdk: flutter
   flutter_chat_ui: ^1.6.9
+
+  table_calendar: ^3.0.9
+
 
 dev_dependencies:
   flutter_test:
