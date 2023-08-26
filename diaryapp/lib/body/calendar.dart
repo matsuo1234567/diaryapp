@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-import 'package:diaryapp/body/chat.dart';
-import 'package:diaryapp/footer.dart';
->>>>>>> f8defce2e42a35e2229df658c7a812d80860bb63
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:diaryapp/Record.dart';
@@ -10,39 +5,16 @@ import 'package:diaryapp/Record.dart';
 DateTime _focused = DateTime.now();
 DateTime? _selected; //追記
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.brown,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-=======
-    return const MaterialApp(
-      home: Footer(),
->>>>>>> f8defce2e42a35e2229df658c7a812d80860bb63
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class Calendar extends StatefulWidget {
+  const Calendar({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Calendar> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
