@@ -21,6 +21,7 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
   final List<types.Message> _messages = [];
+  String conversation = "";
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
   final _chatgpt = const types.User(
@@ -65,6 +66,18 @@ class ChatRoomState extends State<ChatRoom> {
     String reply = response.choices.first.message.content;
 
     _handleReceivedMessage(reply);
+
+    String user_message = message.text;
+
+    conversation += 'U: $user_message\n S: $reply\n';
+
+    if (message.text == "終了") {
+      final diary =
+          await OpenAI.instance.chat.create(model: "gpt-3.5-turbo", messages: [
+        OpenAIChatCompletionChoiceMessageModel(
+            role: OpenAIChatMessageRole.user, content: conversation)
+      ]);
+    }
   }
 
   void _handleReceivedMessage(String message) {
