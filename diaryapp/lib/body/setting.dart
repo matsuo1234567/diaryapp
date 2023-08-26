@@ -205,9 +205,6 @@ class _SettingsPageState extends State<SettingsPage> {
     try {
       var response = await request.send();
       if (response.statusCode == 200) {
-        String data = await rootBundle.loadString(response.toString());
-        final text = json.decode(data);
-        String url = text["url"];
         debugPrint('Image uploaded successfully');
       } else {
         debugPrint(
