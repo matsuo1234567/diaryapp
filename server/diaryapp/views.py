@@ -11,13 +11,13 @@ def get_img(request):
 
     if request.method == "POST":
         # ← 受け取ったPOST画像データを保存
-        res, file_name = save(request.FILES["image_file"])
+        res, file_name = save(request.FILES["image"])
         res = request.build_absolute_uri(res) #絶対pathに基づくURLの作成
 
     else:  # ← methodが'POST'ではない = 最初のページ表示時の処理
         return HttpResponse("this is post page!")
 
-    data = Data.objects.get(id=1)
+    data = Data.objects.create()
     data.url = res
     data.save()
 
