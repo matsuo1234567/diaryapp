@@ -87,6 +87,58 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               SizedBox(height: 16),
+              Text('AI Settings', style: TextStyle(fontSize: 18)),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: '名前(AI)',
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 16),
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: '一人称',
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: '性格',
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: '短所',
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: '好きなもの',
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: '嫌いなもの',
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: '備考',
+                ),
+                maxLines: 3,
+              ),
             ],
           ),
         ),
