@@ -27,7 +27,7 @@ class ChatRoomState extends State<ChatRoom> {
       id: "chatgpt",
       firstName: "Ikeuchi",
       lastName: "Akira",
-      imageUrl: "/assets/images/Akira_0809.jpg");
+      imageUrl: "http://10.0.2.2:8000/server/img/Akira_0809_IDhkeR8.jpg");
 
   @override
   void initState() {
