@@ -7,6 +7,7 @@ void main() {
 }
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -144,19 +145,18 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildNotificationButton(String label, bool value) {
     return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          isNotificationOn = value;
-        });
-      },
-      child: Text(label),
-      style: ElevatedButton.styleFrom(
-        primary: isNotificationOn == value ? Color(0xffE49B5B) : Colors.grey,
-        elevation: isNotificationOn == value ? 2 : 0,
-        shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(50),
-      ),
-    )
-    );
+        onPressed: () {
+          setState(() {
+            isNotificationOn = value;
+          });
+        },
+        child: Text(label),
+        style: ElevatedButton.styleFrom(
+          primary: isNotificationOn == value ? Color(0xffE49B5B) : Colors.grey,
+          elevation: isNotificationOn == value ? 2 : 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+        ));
   }
 }
