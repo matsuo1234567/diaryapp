@@ -8,6 +8,7 @@ void main() {
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -15,9 +16,33 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final ImagePicker _userPicker = ImagePicker();
   final ImagePicker _aiPicker = ImagePicker();
-  File? _userFile;
   File? _aiFile;
   bool isNotificationOn = false;
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null && picked != selectedTime)
+      setState(() {
+        selectedTime = picked;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,23 +64,25 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            // User
-
             _buildSectionTitle("User"),
             _buildTextField('名前(ユーザー)'),
-
-            _buildTextField('誕生日'),
+            ListTile(
+              title: Text(
+                  "誕生日"),
+              trailing: Icon(Icons.calendar_today),
+              onTap: () => _selectDate(context),
+            ),
             SizedBox(height: 16),
-
-            // Notification
             _buildSectionTitle("Notification"),
             _buildNotificationButtons(),
-
-            // Time Picker
-            if (isNotificationOn) _buildTextField('通知時間'),
+            if (isNotificationOn)
+              ListTile(
+                title:
+                    Text("通知時間"),
+                trailing: Icon(Icons.access_time),
+                onTap: () => _selectTime(context),
+              ),
             SizedBox(height: 16),
-
-            // AI Settings
             _buildSectionTitle("AI Settings"),
             _buildTextField('名前(AI)'),
             _buildImageSelector(
@@ -64,8 +91,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 final XFile? aiImage = await _aiPicker.pickImage(
                   source: ImageSource.gallery,
                 );
-                _aiFile = File(aiImage!.path);
-                setState(() {});
+                if (aiImage != null) {
+                  setState(() {
+                    _aiFile = File(aiImage.path);
+                  });
+                }
               },
             ),
             _buildTextField('一人称'),
@@ -113,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Row(
       children: [
         IconButton(
-          icon: Icon(Icons.camera_alt),
+          icon: Icon(Icons.add_a_photo_outlined),
           onPressed: onPressed,
         ),
         SizedBox(width: 16),
