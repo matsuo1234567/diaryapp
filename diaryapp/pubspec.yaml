@@ -10,7 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_chat_ui: ^1.6.9
-  image_picker: ^0.8.4+4
+
+  flutter_chat_types: ^3.6.2
+  dart_openai: ^4.0.0
+  flutter_dotenv: ^5.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -18,4 +22,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+  assets:
+    - .env
   uses-material-design: true
