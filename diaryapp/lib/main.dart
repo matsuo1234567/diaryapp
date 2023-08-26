@@ -1,4 +1,5 @@
 import 'package:diaryapp/body/chat.dart';
+import 'package:diaryapp/footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -13,7 +14,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: ChatRoom(),
+      home: Footer(),
     );
   }
 }
