@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 String randomString() {
   final random = Random.secure();
@@ -22,13 +23,47 @@ class ChatRoom extends StatefulWidget {
 class ChatRoomState extends State<ChatRoom> {
   final List<types.Message> _messages = [];
   String conversation = "";
+  String Url = "";
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
-  final _chatgpt = const types.User(
-      id: "chatgpt",
-      firstName: "Ikeuchi",
-      lastName: "Akira",
-      imageUrl: "http://10.0.2.2:8000/server/img/Akira_0809_IDhkeR8.jpg");
+  Future<void> get_url() async {
+    final url = Uri.parse("http://127.0.0.1:8000/server/get_url/");
+    var response = await http.get(url);
+
+    try {
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        Url = data["url"];
+        debugPrint('Image uploaded successfully');
+      } else {
+        debugPrint(
+            'Image upload failed with status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error uploading image: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeChatGPT(); // Url を取得後に _chatgpt を初期化
+  }
+
+  Future<void> _initializeChatGPT() async {
+    await get_url(); // Url を取得
+
+    setState(() {
+      _chatgpt = types.User(
+        id: "chatgpt",
+        firstName: "Ikeuchi",
+        lastName: "Akira",
+        imageUrl: Url,
+      );
+    });
+  }
+
+  types.User _chatgpt = const types.User(id: "chatgpt");
 
   @override
   Widget build(BuildContext context) => Scaffold(
