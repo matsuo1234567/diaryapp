@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-=======
-import 'package:diaryapp/body/chat.dart';
 import 'package:diaryapp/footer.dart';
->>>>>>> f8defce2e42a35e2229df658c7a812d80860bb63
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:diaryapp/Record.dart';
@@ -18,17 +14,8 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.brown,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-=======
     return const MaterialApp(
       home: Footer(),
->>>>>>> f8defce2e42a35e2229df658c7a812d80860bb63
     );
   }
 }

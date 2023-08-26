@@ -30,17 +30,6 @@ class ChatRoomState extends State<ChatRoom> {
       imageUrl: "http://10.0.2.2:8000/server/img/Akira_0809_IDhkeR8.jpg");
 
   @override
-  void initState() {
-    super.initState();
-    _addMessage(types.TextMessage(
-      author: _chatgpt,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: randomString(),
-      text: "test",
-    ));
-  }
-
-  @override
   Widget build(BuildContext context) => Scaffold(
         body: Chat(
           user: _user,
@@ -67,7 +56,6 @@ class ChatRoomState extends State<ChatRoom> {
     );
 
     _addMessage(textMessage);
-    debugPrint(message.text);
 
     final response =
         await OpenAI.instance.chat.create(model: "gpt-3.5-turbo", messages: [
@@ -75,7 +63,6 @@ class ChatRoomState extends State<ChatRoom> {
           role: OpenAIChatMessageRole.user, content: message.text)
     ]);
     String reply = response.choices.first.message.content;
-    debugPrint(reply);
 
     _handleReceivedMessage(reply);
   }
