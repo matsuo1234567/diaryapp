@@ -21,6 +21,7 @@ class ChatRoom extends StatefulWidget {
 
 class ChatRoomState extends State<ChatRoom> {
   final List<types.Message> _messages = [];
+  String conversation = "";
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
   final _chatgpt = const types.User(
@@ -28,17 +29,6 @@ class ChatRoomState extends State<ChatRoom> {
       firstName: "Ikeuchi",
       lastName: "Akira",
       imageUrl: "http://10.0.2.2:8000/server/img/Akira_0809_IDhkeR8.jpg");
-
-  @override
-  void initState() {
-    super.initState();
-    _addMessage(types.TextMessage(
-      author: _chatgpt,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: randomString(),
-      text: "test",
-    ));
-  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -67,7 +57,6 @@ class ChatRoomState extends State<ChatRoom> {
     );
 
     _addMessage(textMessage);
-    debugPrint(message.text);
 
     final response =
         await OpenAI.instance.chat.create(model: "gpt-3.5-turbo", messages: [
@@ -75,9 +64,20 @@ class ChatRoomState extends State<ChatRoom> {
           role: OpenAIChatMessageRole.user, content: message.text)
     ]);
     String reply = response.choices.first.message.content;
-    debugPrint(reply);
 
     _handleReceivedMessage(reply);
+
+    String user_message = message.text;
+
+    conversation += 'U: $user_message\n S: $reply\n';
+
+    if (message.text == "終了") {
+      final diary =
+          await OpenAI.instance.chat.create(model: "gpt-3.5-turbo", messages: [
+        OpenAIChatCompletionChoiceMessageModel(
+            role: OpenAIChatMessageRole.user, content: conversation)
+      ]);
+    }
   }
 
   void _handleReceivedMessage(String message) {
