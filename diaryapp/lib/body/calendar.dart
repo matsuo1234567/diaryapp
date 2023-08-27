@@ -17,17 +17,13 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
+  bool _visible = false;
 
   @override
-  //アプリの初期化時に呼び出される
   void initState() {
     super.initState();
 
     _selectedDay = _focusedDay;
-    //選択された日付に関するイベントのリストを保持する。
-    //valuenotifierは値が変化するたびにwidgetを再構築可能
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
 
@@ -42,7 +38,6 @@ class _CalendarPageState extends State<CalendarPage> {
       },
       body: jsonEncode({"date": wantDay}),
     );
-    print('success');
 
     try {
       if (response.statusCode == 200) {
@@ -61,57 +56,53 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-//stateオブジェクトが不要になった時に呼び出される
   @override
-  //アプリの終了時に呼び出される
   void dispose() {
     _selectedEvents.dispose();
     super.dispose();
   }
 
-//特定の日付のイベントを取得するため
   List<Event> _getEventsForDay(DateTime day) {
-    //与えられた日付に関するイベントリストを返す
     return kEvents[day] ?? [];
   }
 
-//クリック時に呼び出し
+//クリック時
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
-    //選択された日付と現在選択されている日付が同じ出ない時
     if (!isSameDay(_selectedDay, selectedDay)) {
-      //Widgetの再構築がトリガー
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
       });
 
+      //wantDayでAPIの日記を呼び出す
       final wantDay = _selectedDay!.toIso8601String().split('T')[0];
-      //returnでdairyが返される
+      //returnで日記が返される
       final result = await getText(wantDay);
 
       setState(() {
         diary = result;
       });
 
-      //選択された日に関するイベントリストを _getEventsForDayメソッドから取得し、
-      //_selectedEventsの値を更新。
-      //これで、表示されているイベントが選択された日に基づいて更新。
+      if(diary == ''){
+        _visible = false;
+      }else{
+        _visible = true;
+      }
+
       _selectedEvents.value = _getEventsForDay(selectedDay);
     }
   }
 
-//あれですあれ
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //ヘッダー
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Color(0xff5C9387)),
         elevation: 0,
         title: const Align(
           alignment: Alignment.centerRight,
           child: Text(
-            "settings",
+            "calendar",
             style: TextStyle(color: Color(0xffE49B5B)),
           ),
         ),
@@ -121,17 +112,15 @@ class _CalendarPageState extends State<CalendarPage> {
         children: [
           Padding(
             padding:
-                const EdgeInsets.only(top: 10, bottom: 25, left: 25, right: 25),
+                const EdgeInsets.only(top: 0, bottom: 25, left: 25, right: 25),
             child: TableCalendar<Event>(
-              firstDay: kFirstDay, //カレンダー最初の日付
-              lastDay: kLastDay, //カレンダー最後の日付
-              focusedDay: _focusedDay, //現在の対象の日付
+              firstDay: kFirstDay,
+              lastDay: kLastDay,
+              focusedDay: _focusedDay,
               selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              rangeStartDay: _rangeStart,
-              rangeEndDay: _rangeEnd,
               calendarFormat: _calendarFormat,
               eventLoader: _getEventsForDay,
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: StartingDayOfWeek.monday, //月曜開始
               calendarStyle: const CalendarStyle(
                   outsideDaysVisible: false,
                   todayDecoration: BoxDecoration(
@@ -143,56 +132,42 @@ class _CalendarPageState extends State<CalendarPage> {
                   formatButtonVisible: false,
                   titleTextStyle:
                       TextStyle(color: Color(0xFF619C90), fontSize: 25)),
-              onFormatChanged: (format) {
-                if (_calendarFormat != format) {
-                  setState(() {
-                    _calendarFormat = format;
-                  });
-                }
-              },
-              onPageChanged: (focusedDay) {
-                _focusedDay = focusedDay;
-              },
             ),
           ),
-          Text(diary),
           //日記の箱
-          Expanded(
-            child: ValueListenableBuilder<List<Event>>(
-              //監視する値を設定
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                          color: Color(0xFFF2F2F2),
-                          border:
-                              Border.all(color: Color(0xFF7C9D96), width: 2),
-                          borderRadius: BorderRadius.circular(20.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              spreadRadius: 1.0,
-                              blurRadius: 2.0,
-                              offset: Offset(0, 5),
-                            )
-                          ]),
-                      child: ListTile(
-                        //箱の内容
-                        title: Text('${diary}'),
-                      ),
-                    );
-                  },
-                );
-              },
+          Visibility(
+            visible: _visible,
+            child: Expanded(
+              child: ValueListenableBuilder<List<Event>>(
+                //監視する値を設定
+                valueListenable: _selectedEvents,
+                builder: (context, daiary, _) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 100,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFF2F2F2),
+                        border: Border.all(color: Color(0xFF7C9D96), width: 2),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            spreadRadius: 1.0,
+                            blurRadius: 2.0,
+                            offset: Offset(0, 5),
+                          )
+                        ]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('${diary}'),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
+          )
         ],
       ),
     );

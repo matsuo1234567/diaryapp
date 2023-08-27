@@ -76,7 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> uploadUserData(String data) async {
-    final url = Uri.parse("http://10.0.2.2:8000/server/save_user/");
+    final url = Uri.parse("http://10.0.2.2/server/save_user/");
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> get_user_data() async {
-    final url = Uri.parse("http://10.0.2.2:8000/server/get_user/");
+    final url = Uri.parse("http://10.0.2.2/server/get_user/");
     var response = await http.get(url);
 
     try {

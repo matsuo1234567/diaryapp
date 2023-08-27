@@ -6,14 +6,14 @@ from .models import Diary, Data, User
 import json
 from datetime import datetime
 
+
 # Create your views here.
 @csrf_exempt
 def get_img(request):
-
     if request.method == "POST":
         # ← 受け取ったPOST画像データを保存
         res, file_name = save(request.FILES["image"])
-        res = request.build_absolute_uri(res) #絶対pathに基づくURLの作成
+        res = request.build_absolute_uri(res)  # 絶対pathに基づくURLの作成
 
     else:  # ← methodが'POST'ではない = 最初のページ表示時の処理
         return HttpResponse("this is post page!")
@@ -31,11 +31,15 @@ def get_img(request):
 def save(data):
     file_name = default_storage.save(data.name, data)
     return default_storage.url(file_name), data.name
-#受け取ったファイルをストレージに保存
+
+
+# 受け取ったファイルをストレージに保存
+
 
 def get_url(request):
     data = Data.objects.get(id=7)
     return JsonResponse({"url": data.url})
+
 
 @csrf_exempt
 def save_text(request):
@@ -46,6 +50,7 @@ def save_text(request):
         return JsonResponse({"status": "save"})
 
     return JsonResponse({"status": "error"})
+
 
 @csrf_exempt
 def get_text(request):
@@ -62,6 +67,7 @@ def get_text(request):
 
     return JsonResponse({"status": "error"})
 
+
 @csrf_exempt
 def save_user_data(request):
     if request.method == "POST":
@@ -73,6 +79,7 @@ def save_user_data(request):
 
         return JsonResponse({"status": "save data"})
     return JsonResponse({"stustu": "error"})
+
 
 def get_user(request):
     user = User.objects.get(id=1)
