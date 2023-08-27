@@ -13,7 +13,7 @@ class Footer extends StatefulWidget {
 class _Footer extends State<Footer> {
   static const _body = [CalendarPage(),ChatRoom(), SettingsPage()];
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
