@@ -55,5 +55,9 @@ def get_text(request):
         target_date = datetime.strptime(date, "%Y-%m-%d").date()
         diary = Diary.objects.filter(created_at__date=target_date)
 
-        return JsonResponse({"diary": diary[0].diary})
+        try:
+            return JsonResponse({"diary": diary[0].diary})
+        except:
+            return JsonResponse({"diary": ""})
+
     return JsonResponse({"status": "error"})
