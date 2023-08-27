@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'body/chat.dart';
 import 'body/setting.dart';
+import 'body/calendar.dart';
 
 class Footer extends StatefulWidget {
   const Footer({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class Footer extends StatefulWidget {
 }
 
 class _Footer extends State<Footer> {
-  static const _body = [ChatRoom(), SettingsPage()];
+  static const _body = [CalendarPage(),ChatRoom(), SettingsPage()];
 
   int _selectedIndex = 0;
 
@@ -28,6 +29,8 @@ class _Footer extends State<Footer> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_month), label: '', tooltip: 'calendar'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.chat), label: '', tooltip: 'chat'),
             BottomNavigationBarItem(
