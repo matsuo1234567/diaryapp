@@ -33,7 +33,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   //APIのやつ
   Future<String> getText(String wantDay) async {
-    final url = Uri.parse("http://10.0.2.2:8000/server/get_text/");
+    final url = Uri.parse("http://127.0.0.1:8000/server/get_text/");
 
     final response = await http.post(
       url,

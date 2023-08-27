@@ -27,7 +27,7 @@ class ChatRoomState extends State<ChatRoom> {
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
   Future<void> get_url() async {
-    final url = Uri.parse("http://10.0.2.2:8000/server/get_url/");
+    final url = Uri.parse("http://127.0.0.1:8000/server/get_url/");
     var response = await http.get(url);
 
     try {
@@ -73,6 +73,7 @@ class ChatRoomState extends State<ChatRoom> {
           onSendPressed: _handleSendPressed,
           showUserAvatars: true,
           showUserNames: true,
+          emptyState: Text("No xxx", style: TextStyle(color: Colors.black)),
         ),
       );
 
@@ -132,7 +133,7 @@ class ChatRoomState extends State<ChatRoom> {
   }
 
   Future<void> uploadtext(String text) async {
-    final url = Uri.parse("http://10.0.2.2:8000/server/save_text/");
+    final url = Uri.parse("http://127.0.0.1:8000/server/save_text/");
     final response = await http.post(
       url,
       headers: <String, String>{
