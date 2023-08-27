@@ -3,12 +3,13 @@ import 'package:table_calendar/table_calendar.dart';
 
 import 'utils.dart';
 
-class TableEventsExample extends StatefulWidget {
+class CalendarPage extends StatefulWidget {
+  const CalendarPage({Key? key}) : super(key: key);
   @override
-  _TableEventsExampleState createState() => _TableEventsExampleState();
+  _CalendarPageState createState() => _CalendarPageState();
 }
 
-class _TableEventsExampleState extends State<TableEventsExample> {
+class _CalendarPageState extends State<CalendarPage> {
   //try
   String? newdiary; //管理したい内容を設定
   //
@@ -129,7 +130,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
             ),
           ),
           //日記の箱
-          
         ],
       ),
     );
