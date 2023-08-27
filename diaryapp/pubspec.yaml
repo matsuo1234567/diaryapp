@@ -12,15 +12,15 @@ dependencies:
     sdk: flutter
   flutter_chat_ui: ^1.6.9
 
+  permission_handler: ^10.4.3
+
   flutter_chat_types: ^3.6.2
   dart_openai: ^4.0.0
   flutter_dotenv: ^5.1.0
 
   image_picker: ^0.8.4+4
   table_calendar: ^3.0.9
-  image_picker: ^1.0.2
-
-
+ 
 
 dev_dependencies:
   flutter_test:

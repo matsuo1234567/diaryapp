@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MaterialApp(home: SettingsPage()));
@@ -86,6 +87,18 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildImageSelector(
               _aiFile,
               () async {
+                var camerastatus = await Permission.camera.status;
+
+                var photosstatus = await Permission.photos.status;
+                var mediaLibrarystatus = await Permission.mediaLibrary.status;
+
+                if (camerastatus.isDenied ||
+                    photosstatus.isDenied ||
+                    mediaLibrarystatus.isDenied) {
+                  await Permission.camera.request();
+                  await Permission.photos.request();
+                  await Permission.mediaLibrary.request();
+                }
                 final XFile? aiImage = await _aiPicker.pickImage(
                   source: ImageSource.gallery,
                 );
