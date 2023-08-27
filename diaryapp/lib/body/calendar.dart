@@ -106,25 +106,17 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       //ヘッダー
       appBar: AppBar(
-        toolbarHeight: 30,
-        leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Color(0xFF7C9D96),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
+        iconTheme: const IconThemeData(color: Color(0xff5C9387)),
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: const Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          Text(
-            'Setting',
-            style: TextStyle(color: Color(0xFFF29545)),
-          )
-        ]),
+        title: const Align(
+          alignment: Alignment.centerRight,
+          child: Text(
+            "settings",
+            style: TextStyle(color: Color(0xffE49B5B)),
+          ),
+        ),
+        backgroundColor: const Color(0xffF6F7F9),
       ),
-
       body: Column(
         children: [
           Padding(
