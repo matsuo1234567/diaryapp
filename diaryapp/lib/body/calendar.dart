@@ -41,7 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8",
       },
-      body: jsonEncode({"text": wantDay}),
+      body: jsonEncode({"date": wantDay}),
     );
 
     try {
