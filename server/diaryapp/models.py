@@ -6,3 +6,6 @@ class Data(models.Model):
 class Diary(models.Model):
     diary = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class User(models.Model):
+    data = models.JSONField()

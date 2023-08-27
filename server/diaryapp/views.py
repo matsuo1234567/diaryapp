@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
-from .models import Diary, Data
+from .models import Diary, Data, User
 import json
 from datetime import datetime
 
@@ -61,3 +61,14 @@ def get_text(request):
             return JsonResponse({"diary": ""})
 
     return JsonResponse({"status": "error"})
+
+@csrf_exempt
+def save_user_data(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+        user = User.objects.get(id=1)
+        user.data = data
+        user.save()
+
+        return JsonResponse({"status": "save data"})
+    return JsonResponse({"stustu": "error"})
