@@ -11,9 +11,7 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  //try
-  String? newdiary; //管理したい内容を設定
-  //
+  String diary = '';
 
   late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
@@ -34,8 +32,9 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   //APIのやつ
-  Future<void> getText(String wantDay) async {
+  Future<String> getText(String wantDay) async {
     final url = Uri.parse("http://10.0.2.2:8000/server/get_text/");
+
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -43,18 +42,22 @@ class _CalendarPageState extends State<CalendarPage> {
       },
       body: jsonEncode({"date": wantDay}),
     );
+    print('success');
 
     try {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final diary = data["diary"];
+
         debugPrint('Diary get successfully');
         return diary;
       } else {
         debugPrint('Diary get failed with status code ${response.statusCode}');
+        return 'Error';
       }
     } catch (e) {
       debugPrint('Error get Diary: $e');
+      return 'Error2';
     }
   }
 
@@ -73,19 +76,23 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
 //クリック時に呼び出し
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     //選択された日付と現在選択されている日付が同じ出ない時
     if (!isSameDay(_selectedDay, selectedDay)) {
+      //Widgetの再構築がトリガー
       setState(() {
-        //Widgetの再構築がトリガー
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-
-        final wantDay = _selectedDay!.toIso8601String().split('T')[0];
-        //returnでdairyが返される
-        final diary = getText(wantDay);
       });
-      
+
+      final wantDay = _selectedDay!.toIso8601String().split('T')[0];
+      //returnでdairyが返される
+      final result = await getText(wantDay);
+
+      setState(() {
+        diary = result;
+      });
+
       //選択された日に関するイベントリストを _getEventsForDayメソッドから取得し、
       //_selectedEventsの値を更新。
       //これで、表示されているイベントが選択された日に基づいて更新。
@@ -96,10 +103,6 @@ class _CalendarPageState extends State<CalendarPage> {
 //あれですあれ
   @override
   Widget build(BuildContext context) {
-    //try
-    print("$newdiary");
-    //
-
     return Scaffold(
       //ヘッダー
       appBar: AppBar(
@@ -160,6 +163,7 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
           ),
+          Text(diary),
           //日記の箱
           Expanded(
             child: ValueListenableBuilder<List<Event>>(
