@@ -30,20 +30,8 @@ final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
     value: (item) => List.generate(
 //各イベントをテキスト形式で生成し、Event~1}という書式になっている
         item % 4 + 1,
-        (index) => Event('Event $item | ${index + 1}')))
+        (index) => Event('Event $item | ${index + 1}')));
 //カレンダーアプリ内の特定の日付に関する固定情報を示している
-  ..addAll({
-    DateTime(2023, 8, 26): [
-      const Event(
-          '今日は初めて日本に来ました。\n明日はマレーシアに行く予定です。\n明後日はロンドンに行きます。\n明明後日はブラジルに行きましょうか。'),
-    ],
-    DateTime(2023, 8, 30): [
-      const Event('初日記'),
-    ],
-    DateTime(2023, 8, 31): [
-      const Event('改行祭\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'),
-    ],
-  });
 
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
