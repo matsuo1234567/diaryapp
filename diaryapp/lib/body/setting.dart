@@ -23,11 +23,10 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController notificationTimeController = TextEditingController();
   TextEditingController aiNameController = TextEditingController();
   TextEditingController aiFirstPersonController = TextEditingController();
+  TextEditingController aiAgeController = TextEditingController();
+  TextEditingController aiCallmeController = TextEditingController();
   TextEditingController aiCharacterController = TextEditingController();
-  TextEditingController aiConsController = TextEditingController();
-  TextEditingController aiLikeController = TextEditingController();
-  TextEditingController aiDislikeController = TextEditingController();
-  TextEditingController aiRemarksController = TextEditingController();
+  TextEditingController aiHabitController = TextEditingController();
 
   @override
   void initState() {
@@ -39,15 +38,10 @@ class _SettingsPageState extends State<SettingsPage> {
       notificationTimeController.text = userData["notificationTime"];
       aiNameController.text = userData["aiName"];
       aiFirstPersonController.text = userData["aiFirstPerson"];
+      aiAgeController.text = userData["aiAge"];
+      aiCallmeController.text = userData["aiCallme"];
       aiCharacterController.text = userData["aiCharacter"];
-      aiConsController.text = userData["aiCons"];
-      aiLikeController.text = userData["aiLike"];
-      aiDislikeController.text = userData["aiDislike"];
-      aiRemarksController.text = userData["aiRemarks"];
-      isNotificationOn = userData["isNotificationOn"];
-
-      // ignore: unused_local_variable
-      final imageUrl = await get_url();
+      aiHabitController.text = userData["aiHabit"];
 
       setState(() {});
     });
@@ -179,12 +173,10 @@ class _SettingsPageState extends State<SettingsPage> {
       'notificationTime': notificationTimeController.text,
       'aiName': aiNameController.text,
       'aiFirstPerson': aiFirstPersonController.text,
+      'aiAge': aiAgeController.text,
+      'aiCallme': aiCallmeController.text,
       'aiCharacter': aiCharacterController.text,
-      'aiCons': aiConsController.text,
-      'aiLike': aiLikeController.text,
-      'aiDislike': aiDislikeController.text,
-      'aiRemarks': aiRemarksController.text,
-      'isNotificationOn': isNotificationOn,
+      'aiHabit': aiHabitController.text,
     };
 
     var settingsJson = jsonEncode(settings);
@@ -237,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               children: [
                 Expanded(
-                  child: _buildTextField('AIの名前', aiNameController),
+                  child: _buildTextField('キャラクターの名前', aiNameController),
                 ),
                 _buildImageSelector(
                   _aiFile,
@@ -266,12 +258,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-            _buildTextField('一人称', aiFirstPersonController),
-            _buildTextField('性格', aiCharacterController),
-            _buildTextField('短所', aiConsController),
-            _buildTextField('好きなもの', aiLikeController),
-            _buildTextField('嫌いなもの', aiDislikeController),
-            _buildTextField('備考', aiRemarksController, maxLines: 3),
+            _buildTextField('キャラクターの一人称', aiFirstPersonController),
+            _buildTextField('キャラクターの年齢', aiAgeController),
+            _buildTextField('私の呼び名(名前)', aiCallmeController),
+            _buildTextField('キャラクターの性格(具体的に)', aiCharacterController,
+                maxLines: 3),
+            _buildTextField('キャラクターの口癖(最低3個)', aiHabitController, maxLines: 3),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
