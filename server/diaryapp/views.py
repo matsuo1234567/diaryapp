@@ -66,8 +66,9 @@ def get_text(request):
 def save_user_data(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
+        user_data = data.get("data")
         user = User.objects.get(id=1)
-        user.data = data
+        user.data = user_data
         user.save()
 
         return JsonResponse({"status": "save data"})
