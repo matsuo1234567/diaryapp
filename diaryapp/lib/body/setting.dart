@@ -75,6 +75,47 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  Future<void> uploadUserData(String data) async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/save_user/");
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: jsonEncode({"data": data}),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        debugPrint('User data uploaded successfully');
+      } else {
+        debugPrint(
+            'User data upload failed with status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error uploading User data: $e');
+    }
+  }
+
+  Future<void> get_user_data() async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/get_user/");
+    var response = await http.get(url);
+
+    try {
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final user_data = data["user_data"];
+        debugPrint('User Data Get successfully');
+        return user_data;
+      } else {
+        debugPrint(
+            'User Data Get failed with status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error Get User Data: $e');
+    }
+  }
+
   Future<void> uploadSettings() async {
     // Collect values from controllers
     var settings = {
@@ -97,19 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
     //debug
     print("JSON representation: $settingsJson");
 
-    final url = Uri.parse("http://10.0.2.2:8000/server/settings/");
-    var response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: settingsJson,
-    );
-
-    if (response.statusCode == 200) {
-      debugPrint('Settings uploaded successfully');
-    } else {
-      debugPrint(
-          'Settings upload failed with status code ${response.statusCode}');
-    }
+    uploadUserData(settingsJson);
   }
 
   @override
