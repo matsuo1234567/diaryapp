@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.core.files.storage import default_storage
 from .models import Diary, Data
 import json
+from datetime import datetime
 
 # Create your views here.
 @csrf_exempt
@@ -44,4 +45,15 @@ def save_text(request):
         Diary.objects.create(diary=text)
         return JsonResponse({"status": "save"})
 
+    return JsonResponse({"status": "error"})
+
+@csrf_exempt
+def get_text(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+        date = data.get("date")
+        target_date = datetime.strptime(date, "%Y-%m-%d").date()
+        diary = Diary.objects.filter(created_at__date=target_date)
+
+        return JsonResponse({"diary": diary[0].diary})
     return JsonResponse({"status": "error"})
