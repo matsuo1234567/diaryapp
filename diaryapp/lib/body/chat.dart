@@ -51,7 +51,7 @@ class ChatRoomState extends State<ChatRoom> {
   }
 
   Future<void> _initializeChatGPT() async {
-    await get_url(); // Url を取得
+    await get_url();
 
     setState(() {
       _chatgpt = types.User(
@@ -84,6 +84,7 @@ class ChatRoomState extends State<ChatRoom> {
 
   void _handleSendPressed(types.PartialText message) async {
     OpenAI.apiKey = dotenv.env["CHATGPT_API_KEY"] ?? "";
+    debugPrint(dotenv.env["CHATGPT_API_KEY"]);
     final textMessage = types.TextMessage(
       author: _user,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -112,6 +113,10 @@ class ChatRoomState extends State<ChatRoom> {
         OpenAIChatCompletionChoiceMessageModel(
             role: OpenAIChatMessageRole.user, content: conversation)
       ]);
+
+      String diary_text = diary.choices.first.message.content;
+
+      await uploadtext(diary_text);
     }
   }
 
@@ -124,5 +129,27 @@ class ChatRoomState extends State<ChatRoom> {
     );
 
     _addMessage(textMessage);
+  }
+
+  Future<void> uploadtext(String text) async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/save_text/");
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: jsonEncode({"text": text}),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        debugPrint('Text uploaded successfully');
+      } else {
+        debugPrint(
+            'Text upload failed with status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error uploading text: $e');
+    }
   }
 }
