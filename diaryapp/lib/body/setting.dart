@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
 
 void main() {
   runApp(MaterialApp(home: SettingsPage()));
@@ -74,6 +75,43 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  Future<void> uploadSettings() async {
+    // Collect values from controllers
+    var settings = {
+      'userName': userNameController.text,
+      'userBirthday': userBirthdayController.text,
+      'notificationTime': notificationTimeController.text,
+      'aiName': aiNameController.text,
+      'aiFirstPerson': aiFirstPersonController.text,
+      'aiCharacter': aiCharacterController.text,
+      'aiCons': aiConsController.text,
+      'aiLike': aiLikeController.text,
+      'aiDislike': aiDislikeController.text,
+      'aiRemarks': aiRemarksController.text,
+      'isNotificationOn': isNotificationOn,
+    };
+    //debug
+    print("Collected settings: $settings");
+
+    var settingsJson = jsonEncode(settings);
+    //debug
+    print("JSON representation: $settingsJson");
+
+    final url = Uri.parse("http://10.0.2.2:8000/server/settings/");
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: settingsJson,
+    );
+
+    if (response.statusCode == 200) {
+      debugPrint('Settings uploaded successfully');
+    } else {
+      debugPrint(
+          'Settings upload failed with status code ${response.statusCode}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,9 +137,7 @@ class _SettingsPageState extends State<SettingsPage> {
             GestureDetector(
               onTap: () => _selectDate(context),
               child: AbsorbPointer(
-                child: _buildTextField(
-                    '誕生日',
-                    userBirthdayController),
+                child: _buildTextField('誕生日', userBirthdayController),
               ),
             ),
             SizedBox(height: 16),
@@ -111,8 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
               GestureDetector(
                 onTap: () => _selectTime(context),
                 child: AbsorbPointer(
-                  child: _buildTextField('通知時間',
-                      notificationTimeController),
+                  child: _buildTextField('通知時間', notificationTimeController),
                 ),
               ),
             SizedBox(height: 16),
@@ -149,13 +184,27 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-            _buildTextField('AIの名前', aiNameController),
             _buildTextField('一人称', aiFirstPersonController),
             _buildTextField('性格', aiCharacterController),
             _buildTextField('短所', aiConsController),
             _buildTextField('好きなもの', aiLikeController),
             _buildTextField('嫌いなもの', aiDislikeController),
             _buildTextField('備考', aiRemarksController, maxLines: 3),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                await uploadSettings();
+                await uploadimage(_aiFile!);
+              },
+              child: Text('Save'),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xffE49B5B),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -258,4 +307,3 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 }
-
