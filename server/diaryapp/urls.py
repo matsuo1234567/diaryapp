@@ -7,4 +7,5 @@ urlpatterns = [
     path('save_text/', views.save_text, name='save_text'),
     path('get_text/', views.get_text, name='get_text'),
     path('save_user/', views.save_user_data, name='save_user_data'),
+    path('get_user/', views.get_user, name='get_user'),
 ]

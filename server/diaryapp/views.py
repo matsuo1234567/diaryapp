@@ -72,3 +72,9 @@ def save_user_data(request):
 
         return JsonResponse({"status": "save data"})
     return JsonResponse({"stustu": "error"})
+
+def get_user(request):
+    user = User.objects.get(id=1)
+    json_data = user.data
+
+    return JsonResponse({"user_data": json_data})
