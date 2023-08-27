@@ -161,6 +161,42 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
           //日記の箱
+          Expanded(
+            child: ValueListenableBuilder<List<Event>>(
+              //監視する値を設定
+              valueListenable: _selectedEvents,
+              builder: (context, value, _) {
+                return ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFF2F2F2),
+                          border:
+                              Border.all(color: Color(0xFF7C9D96), width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              spreadRadius: 1.0,
+                              blurRadius: 2.0,
+                              offset: Offset(0, 5),
+                            )
+                          ]),
+                      child: ListTile(
+                        //箱の内容
+                        title: Text('${value[index]}'),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
