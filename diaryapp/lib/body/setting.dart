@@ -6,10 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
-void main() {
-  runApp(MaterialApp(home: SettingsPage()));
-}
-
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -94,7 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> uploadUserData(String data) async {
-    final url = Uri.parse("http://127.0.0.1:8000/server/save_user/");
+    final url = Uri.parse("http://10.0.2.2:8000/server/save_user/");
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -116,7 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<String?> get_url() async {
-    final url = Uri.parse("http://127.0.0.1:8000/server/get_url/");
+    final url = Uri.parse("http://10.0.2.2:8000/server/get_url/");
     var response = await http.get(url);
 
     try {
@@ -135,7 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<Map<String, dynamic>> get_user_data() async {
-    final url = Uri.parse("http://127.0.0.1:8000/server/get_user/");
+    final url = Uri.parse("http://10.0.2.2:8000/server/get_user/");
     var response = await http.get(url);
 
     try {
@@ -362,7 +358,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> uploadimage(File imageFile) async {
-    final url = Uri.parse("http://127.0.0.1:8000/server/img/");
+    final url = Uri.parse("http://10.0.2.2:8000/server/img/");
     var request = http.MultipartRequest("POST", url);
 
     var image = await http.MultipartFile.fromPath("image", imageFile.path);

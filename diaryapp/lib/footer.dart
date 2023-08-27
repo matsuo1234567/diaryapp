@@ -11,9 +11,9 @@ class Footer extends StatefulWidget {
 }
 
 class _Footer extends State<Footer> {
-  static const _body = [CalendarPage(),ChatRoom(), SettingsPage()];
+  static const _body = [CalendarPage(), ChatRoom(), SettingsPage()];
 
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,7 +30,9 @@ class _Footer extends State<Footer> {
           onTap: _onItemTapped,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month), label: '', tooltip: 'calendar'),
+                icon: Icon(Icons.calendar_month),
+                label: '',
+                tooltip: 'calendar'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.chat), label: '', tooltip: 'chat'),
             BottomNavigationBarItem(
