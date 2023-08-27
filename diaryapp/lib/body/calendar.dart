@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:http/http.dart' as http;
 import 'utils.dart';
+import 'dart:convert';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
@@ -32,6 +33,31 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
 
+  //APIのやつ
+  Future<void> getText(String wantDay) async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/get_text/");
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: jsonEncode({"text": wantDay}),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final diary = data["diary"];
+        debugPrint('Diary get successfully');
+        return diary;
+      } else {
+        debugPrint('Diary get failed with status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error get Diary: $e');
+    }
+  }
+
 //stateオブジェクトが不要になった時に呼び出される
   @override
   //アプリの終了時に呼び出される
@@ -54,6 +80,8 @@ class _CalendarPageState extends State<CalendarPage> {
         //Widgetの再構築がトリガー
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
+
+        final wantDay = _selectedDay!.toIso8601String().split('T')[0];
       });
       //選択された日に関するイベントリストを _getEventsForDayメソッドから取得し、
       //_selectedEventsの値を更新。
