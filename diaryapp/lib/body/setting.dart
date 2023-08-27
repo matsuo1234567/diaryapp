@@ -29,6 +29,25 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController aiDislikeController = TextEditingController();
   TextEditingController aiRemarksController = TextEditingController();
 
+   @override
+  void initState() {
+    super.initState();
+    
+    // 初期化処理をここに書く
+
+    
+    // デフォルト値はnull?
+    userNameController.text = "";
+
+  }
+  /*
+・画面を表示した時に登録済みであればJSONデータを表示
+・画面を表示した時に登録されていなければ空白のまま
+・画面を表示した時に画像が登録されていれば表示
+・画面を表示した時に登録されていなければ空白のまま
+ */
+
+
   final ImagePicker _aiPicker = ImagePicker();
   File? _aiFile;
   bool isNotificationOn = false;
@@ -90,26 +109,12 @@ class _SettingsPageState extends State<SettingsPage> {
       'aiRemarks': aiRemarksController.text,
       'isNotificationOn': isNotificationOn,
     };
-    //debug
-    print("Collected settings: $settings");
 
     var settingsJson = jsonEncode(settings);
     //debug
     print("JSON representation: $settingsJson");
 
-    final url = Uri.parse("http://10.0.2.2:8000/server/settings/");
-    var response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: settingsJson,
-    );
 
-    if (response.statusCode == 200) {
-      debugPrint('Settings uploaded successfully');
-    } else {
-      debugPrint(
-          'Settings upload failed with status code ${response.statusCode}');
-    }
   }
 
   @override
