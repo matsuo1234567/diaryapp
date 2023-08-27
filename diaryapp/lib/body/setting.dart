@@ -83,31 +83,37 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             SizedBox(height: 16),
             _buildSectionTitle("AI Settings"),
-            _buildTextField('名前(AI)'),
-            _buildImageSelector(
-              _aiFile,
-              () async {
-                var camerastatus = await Permission.camera.status;
+            Row(
+              children: [
+                Expanded(
+                  child: _buildTextField('名前(AI)'),
+                ),
+                _buildImageSelector(
+                  _aiFile,
+                  () async {
+                    var camerastatus = await Permission.camera.status;
+                    var photosstatus = await Permission.photos.status;
+                    var mediaLibrarystatus =
+                        await Permission.mediaLibrary.status;
 
-                var photosstatus = await Permission.photos.status;
-                var mediaLibrarystatus = await Permission.mediaLibrary.status;
-
-                if (camerastatus.isDenied ||
-                    photosstatus.isDenied ||
-                    mediaLibrarystatus.isDenied) {
-                  await Permission.camera.request();
-                  await Permission.photos.request();
-                  await Permission.mediaLibrary.request();
-                }
-                final XFile? aiImage = await _aiPicker.pickImage(
-                  source: ImageSource.gallery,
-                );
-                if (aiImage != null) {
-                  setState(() {
-                    _aiFile = File(aiImage.path);
-                  });
-                }
-              },
+                    if (camerastatus.isDenied ||
+                        photosstatus.isDenied ||
+                        mediaLibrarystatus.isDenied) {
+                      await Permission.camera.request();
+                      await Permission.photos.request();
+                      await Permission.mediaLibrary.request();
+                    }
+                    final XFile? aiImage = await _aiPicker.pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (aiImage != null) {
+                      setState(() {
+                        _aiFile = File(aiImage.path);
+                      });
+                    }
+                  },
+                ),
+              ],
             ),
             _buildTextField('一人称'),
             _buildTextField('性格'),
@@ -151,26 +157,20 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildImageSelector(File? file, VoidCallback onPressed) {
-    return Row(
-      children: [
-        IconButton(
-          icon: Icon(Icons.add_a_photo_outlined),
-          onPressed: onPressed,
-        ),
-        SizedBox(width: 16),
-        file != null
-            ? Image.file(
-                file,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              )
-            : Container(
-                width: 50,
-                height: 50,
-                color: Colors.grey,
+    return GestureDetector(
+      onTap: onPressed,
+      child: CircleAvatar(
+        radius: 25,
+        backgroundColor: Colors.grey,
+        child: file != null
+            ? null
+            : Icon(
+                Icons.person,
+                color: Colors.white,
+                size: 30.0,
               ),
-      ],
+        backgroundImage: file != null ? FileImage(file) : null,
+      ),
     );
   }
 
