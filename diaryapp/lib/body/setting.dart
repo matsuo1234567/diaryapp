@@ -82,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: [
             _buildSectionTitle("User"),
-            _buildTextField('名前(ユーザー)'),
+            _buildTextField('あなたの名前'),
             ListTile(
               title: Text(
                   "誕生日 ${selectedDate.toLocal().toString().split(' ')[0]}"),
@@ -104,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               children: [
                 Expanded(
-                  child: _buildTextField('名前(AI)'),
+                  child: _buildTextField('AIの名前'),
                 ),
                 _buildImageSelector(
                   _aiFile,
