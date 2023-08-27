@@ -8,7 +8,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-
 void main() {
   runApp(MaterialApp(home: SettingsPage()));
 }
@@ -100,7 +99,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             SizedBox(height: 16),
             _buildSectionTitle("AI Settings"),
-
             Row(
               children: [
                 Expanded(
@@ -132,7 +130,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
               ],
-
             ),
             _buildTextField('一人称'),
             _buildTextField('性格'),
