@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -20,6 +17,17 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController userBirthdayController = TextEditingController();
+  TextEditingController notificationTimeController = TextEditingController();
+  TextEditingController aiNameController = TextEditingController();
+  TextEditingController aiFirstPersonController = TextEditingController();
+  TextEditingController aiCharacterController = TextEditingController();
+  TextEditingController aiConsController = TextEditingController();
+  TextEditingController aiLikeController = TextEditingController();
+  TextEditingController aiDislikeController = TextEditingController();
+  TextEditingController aiRemarksController = TextEditingController();
+
   final ImagePicker _aiPicker = ImagePicker();
   File? _aiFile;
   bool isNotificationOn = false;
@@ -28,14 +36,18 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+      userBirthdayController.text =
+          selectedDate.toLocal().toString().split(' ')[0];
+    }
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -43,10 +55,12 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       initialTime: selectedTime,
     );
-    if (picked != null && picked != selectedTime)
+    if (picked != null && picked != selectedTime) {
       setState(() {
         selectedTime = picked;
       });
+      notificationTimeController.text = selectedTime.format(context);
+    }
   }
 
   Future<void> _saveImageLocally(File image) async {
@@ -81,28 +95,32 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: [
             _buildSectionTitle("User"),
-            _buildTextField('あなたの名前'),
-            ListTile(
-              title: Text(
-                  "誕生日 ${selectedDate.toLocal().toString().split(' ')[0]}"),
-              trailing: Icon(Icons.calendar_today),
+            _buildTextField('あなたの名前', userNameController),
+            GestureDetector(
               onTap: () => _selectDate(context),
+              child: AbsorbPointer(
+                child: _buildTextField(
+                    '誕生日',
+                    userBirthdayController),
+              ),
             ),
             SizedBox(height: 16),
             _buildSectionTitle("Notification"),
             _buildNotificationButtons(),
             if (isNotificationOn)
-              ListTile(
-                title: Text("通知時間 ${selectedTime.format(context)}"),
-                trailing: Icon(Icons.access_time),
+              GestureDetector(
                 onTap: () => _selectTime(context),
+                child: AbsorbPointer(
+                  child: _buildTextField('通知時間',
+                      notificationTimeController),
+                ),
               ),
             SizedBox(height: 16),
             _buildSectionTitle("AI Settings"),
             Row(
               children: [
                 Expanded(
-                  child: _buildTextField('AIの名前'),
+                  child: _buildTextField('AIの名前', aiNameController),
                 ),
                 _buildImageSelector(
                   _aiFile,
@@ -131,12 +149,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-            _buildTextField('一人称'),
-            _buildTextField('性格'),
-            _buildTextField('短所'),
-            _buildTextField('好きなもの'),
-            _buildTextField('嫌いなもの'),
-            _buildTextField('備考', maxLines: 3),
+            _buildTextField('AIの名前', aiNameController),
+            _buildTextField('一人称', aiFirstPersonController),
+            _buildTextField('性格', aiCharacterController),
+            _buildTextField('短所', aiConsController),
+            _buildTextField('好きなもの', aiLikeController),
+            _buildTextField('嫌いなもの', aiDislikeController),
+            _buildTextField('備考', aiRemarksController, maxLines: 3),
           ],
         ),
       ),
@@ -153,8 +172,10 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildTextField(String hint, {int maxLines = 1}) {
+  Widget _buildTextField(String hint, TextEditingController controller,
+      {int maxLines = 1}) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: hint,
         enabledBorder: UnderlineInputBorder(
@@ -237,3 +258,4 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 }
+
