@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 
 void main() {
@@ -50,6 +50,17 @@ class _SettingsPageState extends State<SettingsPage> {
       });
   }
 
+  Future<void> _saveImageLocally(File image) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final imagePath = '${directory.path}/ai_image.png';
+
+    await image.copy(imagePath);
+
+    setState(() {
+      _aiFile = File(imagePath);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,10 +84,8 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildSectionTitle("User"),
             _buildTextField('名前(ユーザー)'),
             ListTile(
-
               title: Text(
                   "誕生日 ${selectedDate.toLocal().toString().split(' ')[0]}"),
-
               trailing: Icon(Icons.calendar_today),
               onTap: () => _selectDate(context),
             ),
@@ -85,14 +94,13 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildNotificationButtons(),
             if (isNotificationOn)
               ListTile(
-
                 title: Text("通知時間 ${selectedTime.format(context)}"),
-
                 trailing: Icon(Icons.access_time),
                 onTap: () => _selectTime(context),
               ),
             SizedBox(height: 16),
             _buildSectionTitle("AI Settings"),
+
             Row(
               children: [
                 Expanded(
@@ -124,6 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
               ],
+
             ),
             _buildTextField('一人称'),
             _buildTextField('性格'),
@@ -211,19 +220,16 @@ class _SettingsPageState extends State<SettingsPage> {
         ));
   }
 
-  Future<void> uploadimage(File, imageFile) async {
-    final url = Uri.parse("http://127.0.0.1:8000/server/img/");
+  Future<void> uploadimage(File imageFile) async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/img/");
     var request = http.MultipartRequest("POST", url);
 
-    var image = await http.MultipartFile.fromBytes("image", imageFile.path);
+    var image = await http.MultipartFile.fromPath("image", imageFile.path);
     request.files.add(image);
 
     try {
-      var response = await request.send();
+      final response = await request.send();
       if (response.statusCode == 200) {
-        String data = await rootBundle.loadString(response.toString());
-        final text = json.decode(data);
-        String url = text["url"];
         debugPrint('Image uploaded successfully');
       } else {
         debugPrint(

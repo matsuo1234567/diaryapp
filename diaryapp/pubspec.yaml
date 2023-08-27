@@ -22,6 +22,7 @@ dependencies:
   table_calendar: ^3.0.9
 
   http: ^1.1.0
+  path_provider: ^2.1.0
 
 dev_dependencies:
   flutter_test:
