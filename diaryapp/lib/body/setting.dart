@@ -123,8 +123,8 @@ class _SettingsPageState extends State<SettingsPage> {
     try {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        return data["url"];
         debugPrint('Image uploaded successfully');
+        return data["url"];
       } else {
         debugPrint(
             'Image upload failed with status code ${response.statusCode}');
