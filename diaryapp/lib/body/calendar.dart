@@ -83,9 +83,9 @@ class _CalendarPageState extends State<CalendarPage> {
         diary = result;
       });
 
-      if(diary == ''){
+      if (diary == '') {
         _visible = false;
-      }else{
+      } else {
         _visible = true;
       }
 
@@ -145,7 +145,6 @@ class _CalendarPageState extends State<CalendarPage> {
                   return Container(
                     margin: const EdgeInsets.symmetric(
                       horizontal: 20.0,
-                      vertical: 100,
                     ),
                     decoration: BoxDecoration(
                         color: Color(0xFFF2F2F2),
