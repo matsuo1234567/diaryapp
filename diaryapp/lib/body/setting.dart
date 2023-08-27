@@ -29,24 +29,29 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController aiDislikeController = TextEditingController();
   TextEditingController aiRemarksController = TextEditingController();
 
-   @override
+  @override
   void initState() {
     super.initState();
-    
-    // 初期化処理をここに書く
+    Future(() async {
+      final userData = await get_user_data();
+      userNameController.text = userData["userName"];
+      userBirthdayController.text = userData["userBirthday"];
+      notificationTimeController.text = userData["notificationTime"];
+      aiNameController.text = userData["aiName"];
+      aiFirstPersonController.text = userData["aiFirstPerson"];
+      aiCharacterController.text = userData["aiCharacter"];
+      aiConsController.text = userData["aiCons"];
+      aiLikeController.text = userData["aiLike"];
+      aiDislikeController.text = userData["aiDislike"];
+      aiRemarksController.text = userData["aiRemarks"];
+      isNotificationOn = userData["isNotificationOn"];
 
-    
-    // デフォルト値はnull?
-    userNameController.text = "";
+      // ignore: unused_local_variable
+      final imageUrl = await get_url();
 
+      setState(() {});
+    });
   }
-  /*
-・画面を表示した時に登録済みであればJSONデータを表示
-・画面を表示した時に登録されていなければ空白のまま
-・画面を表示した時に画像が登録されていれば表示
-・画面を表示した時に登録されていなければ空白のまま
- */
-
 
   final ImagePicker _aiPicker = ImagePicker();
   File? _aiFile;
@@ -116,22 +121,53 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  Future<void> get_user_data() async {
+  Future<String?> get_url() async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/get_url/");
+    var response = await http.get(url);
+
+    try {
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return data["url"];
+      } else {
+        debugPrint(
+            'Image URL fetch failed with status code ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('Error fetching image URL: $e');
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> get_user_data() async {
     final url = Uri.parse("http://10.0.2.2:8000/server/get_user/");
     var response = await http.get(url);
 
     try {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        final user_data = data["user_data"];
+
+        Map<String, dynamic> user_data;
+        if (data["user_data"] is String) {
+          user_data = json.decode(data["user_data"]);
+        } else if (data["user_data"] is Map) {
+          user_data = Map<String, dynamic>.from(data["user_data"]);
+        } else {
+          throw Exception("Unexpected type for user_data");
+        }
+
         debugPrint('User Data Get successfully');
         return user_data;
       } else {
         debugPrint(
             'User Data Get failed with status code ${response.statusCode}');
+        return Future.error(
+            'User Data Get failed with status code ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error Get User Data: $e');
+      return Future.error('Error Get User Data: $e');
     }
   }
 
