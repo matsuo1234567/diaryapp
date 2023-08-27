@@ -82,7 +82,10 @@ class _CalendarPageState extends State<CalendarPage> {
         _focusedDay = focusedDay;
 
         final wantDay = _selectedDay!.toIso8601String().split('T')[0];
+        //returnでdairyが返される
+        final diary = getText(wantDay);
       });
+      
       //選択された日に関するイベントリストを _getEventsForDayメソッドから取得し、
       //_selectedEventsの値を更新。
       //これで、表示されているイベントが選択された日に基づいて更新。
