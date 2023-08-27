@@ -116,6 +116,24 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  Future<void> get_url() async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/get_url/");
+    var response = await http.get(url);
+
+    try {
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return data["url"];
+        debugPrint('Image uploaded successfully');
+      } else {
+        debugPrint(
+            'Image upload failed with status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error uploading image: $e');
+    }
+  }
+
   Future<void> uploadSettings() async {
     // Collect values from controllers
     var settings = {
