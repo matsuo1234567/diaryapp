@@ -18,3 +18,14 @@
 
 ### データベース
 *   SQLite3 3.42.0
+
+
+## デザイン
+### チャット画面
+![チャット](https://github.com/matsuo1234567/diaryapp/assets/102137735/1bd2b395-a4dd-4e54-a989-0905b6908bca)
+
+### 設定画面
+![設定(nitice OFF)](https://github.com/matsuo1234567/diaryapp/assets/102137735/8e77a642-0a11-47b5-b8e8-3b1c94789566)
+
+### カレンダー画面
+![月カレンダー(柄あり) (1)](https://github.com/matsuo1234567/diaryapp/assets/102137735/08d7b3f1-5865-44b8-8ac4-03bca610891f)
