@@ -193,7 +193,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           ]),
                       child: ListTile(
                         //箱の内容
-                        title: Text('${value[index]}'),
+                        title: Text('${diary}'),
                       ),
                     );
                   },
