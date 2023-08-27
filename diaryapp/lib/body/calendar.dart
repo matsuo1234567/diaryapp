@@ -112,7 +112,7 @@ class _CalendarPageState extends State<CalendarPage> {
         children: [
           Padding(
             padding:
-                const EdgeInsets.only(top: 0, bottom: 25, left: 25, right: 25),
+                const EdgeInsets.only(top: 0, bottom: 0, left: 25, right: 25),
             child: TableCalendar<Event>(
               firstDay: kFirstDay,
               lastDay: kLastDay,
@@ -137,34 +137,31 @@ class _CalendarPageState extends State<CalendarPage> {
           //日記の箱
           Visibility(
             visible: _visible,
-            child: Expanded(
-              child: ValueListenableBuilder<List<Event>>(
-                //監視する値を設定
-                valueListenable: _selectedEvents,
-                builder: (context, daiary, _) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                    ),
-                    decoration: BoxDecoration(
-                        color: Color(0xFFF2F2F2),
-                        border: Border.all(color: Color(0xFF7C9D96), width: 2),
-                        borderRadius: BorderRadius.circular(20.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            spreadRadius: 1.0,
-                            blurRadius: 2.0,
-                            offset: Offset(0, 5),
-                          )
-                        ]),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('${diary}'),
-                    ),
-                  );
-                },
-              ),
+            child: ValueListenableBuilder<List<Event>>(
+              //監視する値を設定
+              valueListenable: _selectedEvents,
+              builder: (context, daiary, _) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 100),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFF2F2F2),
+                      border: Border.all(color: Color(0xFF7C9D96), width: 2),
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          spreadRadius: 1.0,
+                          blurRadius: 2.0,
+                          offset: Offset(0, 5),
+                        )
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('${diary}'),
+                  ),
+                );
+              },
             ),
           )
         ],
