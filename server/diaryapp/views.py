@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
 from .models import Diary, Data, User
-import json
+import json, openai, os
 from datetime import datetime
 
 # Create your views here.
@@ -38,16 +38,6 @@ def get_url(request):
     return JsonResponse({"url": data.url})
 
 @csrf_exempt
-def save_text(request):
-    if request.method == "POST":
-        data = json.loads(request.body.decode("utf-8"))
-        text = data.get("text")
-        Diary.objects.create(diary=text)
-        return JsonResponse({"status": "save"})
-
-    return JsonResponse({"status": "error"})
-
-@csrf_exempt
 def get_text(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
@@ -72,10 +62,32 @@ def save_user_data(request):
         user.save()
 
         return JsonResponse({"status": "save data"})
-    return JsonResponse({"stustu": "error"})
+    return JsonResponse({"status": "error"})
 
 def get_user(request):
     user = User.objects.get(id=1)
     json_data = user.data
 
     return JsonResponse({"user_data": json_data})
+
+@csrf_exempt
+def make_diary(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+        text = data.get("log")
+        file_path = os.path.abspath("diaryapp/api.text")
+        with open(file_path) as f:
+            openai.api_key = f.read().strip()
+        prompt = "日記作成プロンプト"
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": text}
+            ]
+        )
+        diary = response["choices"][0]["message"]["content"]
+        Diary.objects.create(diary=diary)
+        return JsonResponse({"status": "save diary"})
+
+    return JsonResponse({"status": "error"})

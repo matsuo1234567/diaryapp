@@ -23,7 +23,6 @@ class ChatRoom extends StatefulWidget {
 class ChatRoomState extends State<ChatRoom> {
   final List<types.Message> _messages = [];
   String conversation = "";
-  String Url = "";
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
   Future<void> get_url() async {
@@ -33,7 +32,7 @@ class ChatRoomState extends State<ChatRoom> {
     try {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        Url = data["url"];
+        return data["url"];
         debugPrint('Image uploaded successfully');
       } else {
         debugPrint(
@@ -51,14 +50,14 @@ class ChatRoomState extends State<ChatRoom> {
   }
 
   Future<void> _initializeChatGPT() async {
-    await get_url();
+    final url = await get_url();
 
     setState(() {
       _chatgpt = types.User(
         id: "chatgpt",
         firstName: "Ikeuchi",
         lastName: "Akira",
-        imageUrl: Url,
+        imageUrl: url,
       );
     });
   }
@@ -108,15 +107,7 @@ class ChatRoomState extends State<ChatRoom> {
     conversation += 'U: $user_message\n S: $reply\n';
 
     if (message.text == "終了") {
-      final diary =
-          await OpenAI.instance.chat.create(model: "gpt-3.5-turbo", messages: [
-        OpenAIChatCompletionChoiceMessageModel(
-            role: OpenAIChatMessageRole.user, content: conversation)
-      ]);
-
-      String diary_text = diary.choices.first.message.content;
-
-      await uploadtext(diary_text);
+      makeDiary(conversation);
     }
   }
 
@@ -139,6 +130,28 @@ class ChatRoomState extends State<ChatRoom> {
         "Content-Type": "application/json; charset=UTF-8",
       },
       body: jsonEncode({"text": text}),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        debugPrint('Text uploaded successfully');
+      } else {
+        debugPrint(
+            'Text upload failed with status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Error uploading text: $e');
+    }
+  }
+
+  Future<void> makeDiary(String text) async {
+    final url = Uri.parse("http://10.0.2.2:8000/server/make_diary/");
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: jsonEncode({"log": text}),
     );
 
     try {
