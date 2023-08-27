@@ -34,14 +34,14 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   //APIのやつ
-  Future<void> getText(String date) async {
+  Future<void> getText(String wantDay) async {
     final url = Uri.parse("http://10.0.2.2:8000/server/get_text/");
     final response = await http.post(
       url,
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8",
       },
-      body: jsonEncode({"text": date}),
+      body: jsonEncode({"text": wantDay}),
     );
 
     try {
@@ -80,6 +80,8 @@ class _CalendarPageState extends State<CalendarPage> {
         //Widgetの再構築がトリガー
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
+
+        final wantDay = _selectedDay!.toIso8601String().split('T')[0];
       });
       //選択された日に関するイベントリストを _getEventsForDayメソッドから取得し、
       //_selectedEventsの値を更新。
