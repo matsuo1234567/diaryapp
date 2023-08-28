@@ -6,10 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
-void main() {
-  runApp(MaterialApp(home: SettingsPage()));
-}
-
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
