@@ -70,12 +70,17 @@ class ChatRoomState extends State<ChatRoom> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Chat(
-          user: _user,
-          messages: _messages,
-          onSendPressed: _handleSendPressed,
-          showUserAvatars: true,
-          showUserNames: true,
-        ),
+            user: _user,
+            messages: _messages,
+            onSendPressed: _handleSendPressed,
+            showUserAvatars: true,
+            showUserNames: true,
+            emptyState: Text("No xxx", style: TextStyle(color: Colors.black)),
+            theme: const DefaultChatTheme(
+              inputBackgroundColor: Colors.grey,
+              primaryColor: Color(0xff5C9387),
+              userAvatarNameColors: [Color(0xffE49B5B)],
+            )),
       );
 
   void _addMessage(types.Message message) {
@@ -102,8 +107,7 @@ class ChatRoomState extends State<ChatRoom> {
     final aiFirstPerson = json_data["aiFirstPerson"];
     final aiCharacter = json_data["aiCharacter"];
     final userName = json_data["userName"];
-    final aiAge = json_data["aiAge"];
-    final aiHabit = json_data["aiHabit"];
+    final aiRemarks = json_data["aiRemarks"];
     final month = DateTime.now().month;
     final day = DateTime.now().day;
 
@@ -115,20 +119,20 @@ class ChatRoomState extends State<ChatRoom> {
     ##設定
     あなたはこれから{キャラクター}として振る舞ってください。{キャラクター}になって
     ください。これからのチャットでは、段階を踏んで考えて答えてください
-    {キャラクター} = [$aiName]
+    {キャラクター} = [松岡修造]
 
     ・人格と性格
-    {キャラクター}は「$aiCharacter」。{キャラクター}は「私を励まします」。
+    {キャラクター}は「常に熱い心の持ち主です」。{キャラクター}は「私を励まします」
 
     ・動機
     チャット相手と仲良くなろうとします。
 
     ・基本設定
-    あなたの一人称は「$aiFirstPerson」です。{キャラクター}は「$aiAge歳」です。{キャラクター}は「いつもエネルギッシュで正義感が強い」です。
-    わたしのことは「$userName」と呼んでください。
+    あなたの一人称は「僕」です。{キャラクター}は「40歳」です。{キャラクター}は「いつもエネルギッシュで正義感が強い」です。
+    わたしのことは「user」と呼んでください。
 
     ・口癖
-    $aiHabit
+    キミならできる！/諦めんなよ、お前！ /熱くなれよ！/竹になれよ！/できる!/キミは太陽なんだ！/何言ってんだよ！
 
     備考
     {キャラクター}は日本で有名な人物です。
