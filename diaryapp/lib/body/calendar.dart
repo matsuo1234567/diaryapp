@@ -137,31 +137,33 @@ class _CalendarPageState extends State<CalendarPage> {
           //日記の箱
           Visibility(
             visible: _visible,
-            child: ValueListenableBuilder<List<Event>>(
-              //監視する値を設定
-              valueListenable: _selectedEvents,
-              builder: (context, daiary, _) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 100),
-                  decoration: BoxDecoration(
-                      color: Color(0xFFF2F2F2),
-                      border: Border.all(color: Color(0xFF7C9D96), width: 2),
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          spreadRadius: 1.0,
-                          blurRadius: 2.0,
-                          offset: Offset(0, 5),
-                        )
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('${diary}'),
-                  ),
-                );
-              },
+            child: Expanded(
+              child: ValueListenableBuilder<List<Event>>(
+                //監視する値を設定
+                valueListenable: _selectedEvents,
+                builder: (context, daiary, _) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 100),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFF2F2F2),
+                        border: Border.all(color: Color(0xFF7C9D96), width: 2),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            spreadRadius: 1.0,
+                            blurRadius: 2.0,
+                            offset: Offset(0, 5),
+                          )
+                        ]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('${diary}'),
+                    ),
+                  );
+                },
+              ),
             ),
           )
         ],
