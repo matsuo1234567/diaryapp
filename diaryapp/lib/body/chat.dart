@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:diaryapp/footer.dart';
